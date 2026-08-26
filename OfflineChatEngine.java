@@ -23,6 +23,9 @@ public class OfflineChatEngine implements ChatEngine {
                 character.getBackground()
         );
 
-        return responseGenerator.generate(prompt, userMessage);
+        return responseGenerator.generate(
+                prompt,
+                userMessage
+        );
     }
 }
