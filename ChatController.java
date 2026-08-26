@@ -15,10 +15,10 @@ public class ChatController {
         this.messageValidator = new MessageValidator();
     }
 
-    public ChatResponse sendMessage(String message) {
+    public ChatResult sendMessage(String message) {
 
         if (!messageValidator.isValid(message)) {
-            return new ChatResponse("");
+            return ChatResult.failure("Please enter a message.");
         }
 
         String cleanedMessage = messageValidator.clean(message);
@@ -30,10 +30,14 @@ public class ChatController {
                 cleanedMessage
         );
 
-        if (response != null && !response.getText().isEmpty()) {
-            chatSession.addCharacterMessage(response.getText());
+        if (response == null || response.getText().isEmpty()) {
+            return ChatResult.failure(
+                    "The character could not generate a response."
+            );
         }
 
-        return response;
+        chatSession.addCharacterMessage(response.getText());
+
+        return ChatResult.success(response);
     }
 }
