@@ -2,7 +2,6 @@ package com.voiceactorstudio;
 
 import android.os.Bundle;
 import android.graphics.Color;
-import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +35,10 @@ public class mainActivity extends AppCompatActivity {
         characterName.setHint("Character name");
         characterName.setContentDescription("Character name");
 
+        EditText personality = new EditText(this);
+        personality.setHint("Character personality");
+        personality.setContentDescription("Character personality");
+
         EditText messageInput = new EditText(this);
         messageInput.setHint("Type a message");
         messageInput.setContentDescription("Message to character");
@@ -47,30 +50,57 @@ public class mainActivity extends AppCompatActivity {
         responseText.setTextSize(18);
         responseText.setTextColor(Color.BLACK);
 
-        layout.addView(
-                title,
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                )
-        );
-
+        layout.addView(title);
         layout.addView(subtitle);
-
         layout.addView(characterName);
-
+        layout.addView(personality);
         layout.addView(messageInput);
-
         layout.addView(sendButton);
-
         layout.addView(responseText);
 
         sendButton.setOnClickListener(view -> {
-            String message = messageInput.getText().toString().trim();
 
-            if (!message.isEmpty()) {
+            String name = characterName.getText().toString().trim();
+            String personalityText =
+                    personality.getText().toString().trim();
+            String message =
+                    messageInput.getText().toString().trim();
+
+            if (name.isEmpty()) {
                 responseText.setText(
-                        "You said: " + message
+                        "Please enter a character name."
+                );
+                return;
+            }
+
+            if (message.isEmpty()) {
+                responseText.setText(
+                        "Please enter a message."
+                );
+                return;
+            }
+
+            Character character = new Character(
+                    name,
+                    personalityText,
+                    ""
+            );
+
+            ChatEngine engine = new OfflineChatEngine();
+            ChatSession session = new ChatSession(character);
+            ChatController controller =
+                    new ChatController(engine, session);
+
+            ChatResult result =
+                    controller.sendMessage(message);
+
+            if (result.isSuccessful()) {
+                responseText.setText(
+                        result.getResponse().getText()
+                );
+            } else {
+                responseText.setText(
+                        result.getErrorMessage()
                 );
             }
         });
