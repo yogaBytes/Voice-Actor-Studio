@@ -1,35 +1,37 @@
-package com.voiceactorstudio
+        package com.voiceactorstudio;
+        
+import android.os.Bundle;
+import android.graphics.Color;
+import android.view.Gravity;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.appcompat.app.AppCompatActivity;
 
-class MainActivity : ComponentActivity() {
+public class mainActivity extends AppCompatActivity {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-        setContent {
-            VoiceActorStudio()
-        }
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setGravity(Gravity.CENTER);
+        layout.setBackgroundColor(Color.WHITE);
+
+        TextView title = new TextView(this);
+        title.setText("Voice Actor Studio");
+        title.setTextSize(28);
+        title.setTextColor(Color.BLACK);
+
+        TextView subtitle = new TextView(this);
+        subtitle.setText("Your offline character studio");
+        subtitle.setTextSize(18);
+        subtitle.setTextColor(Color.DKGRAY);
+
+        layout.addView(title);
+        layout.addView(subtitle);
+
+        setContentView(layout);
     }
 }
-
-@Composable
-fun VoiceActorStudio() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("Voice Actor Studio")
-        Text("Your offline character studio")
-    }
-}          
