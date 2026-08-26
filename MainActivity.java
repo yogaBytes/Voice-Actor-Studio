@@ -1,3 +1,4 @@
+```java
 package com.voiceactorstudio;
 
 import android.os.Bundle;
@@ -12,9 +13,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class mainActivity extends AppCompatActivity {
 
+    private CharacterRepository characterRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        characterRepository = new CharacterRepository(this);
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
@@ -50,7 +55,14 @@ public class mainActivity extends AppCompatActivity {
         responseText.setTextSize(18);
         responseText.setTextColor(Color.BLACK);
 
-        layout.addView(title);
+        layout.addView(
+                title,
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+        );
+
         layout.addView(subtitle);
         layout.addView(characterName);
         layout.addView(personality);
@@ -60,9 +72,12 @@ public class mainActivity extends AppCompatActivity {
 
         sendButton.setOnClickListener(view -> {
 
-            String name = characterName.getText().toString().trim();
+            String name =
+                    characterName.getText().toString().trim();
+
             String personalityText =
                     personality.getText().toString().trim();
+
             String message =
                     messageInput.getText().toString().trim();
 
@@ -86,10 +101,18 @@ public class mainActivity extends AppCompatActivity {
                     ""
             );
 
+            characterRepository.addCharacter(character);
+
             ChatEngine engine = new OfflineChatEngine();
-            ChatSession session = new ChatSession(character);
+
+            ChatSession session =
+                    new ChatSession(character);
+
             ChatController controller =
-                    new ChatController(engine, session);
+                    new ChatController(
+                            engine,
+                            session
+                    );
 
             ChatResult result =
                     controller.sendMessage(message);
@@ -108,3 +131,4 @@ public class mainActivity extends AppCompatActivity {
         setContentView(layout);
     }
 }
+```
