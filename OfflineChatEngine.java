@@ -1,13 +1,28 @@
 package com.voiceactorstudio;
 
-public class OfflineChatEngine {
+public class OfflineChatEngine implements ChatEngine {
 
-    public String generateResponse(Character character, String userMessage) {
+    private final OfflineResponseGenerator responseGenerator;
 
-        if (userMessage == null || userMessage.trim().isEmpty()) {
-            return character.getGreeting();
+    public OfflineChatEngine() {
+        responseGenerator = new OfflineResponseGenerator();
+    }
+
+    @Override
+    public ChatResponse generateResponse(
+            Character character,
+            String userMessage) {
+
+        if (character == null) {
+            return new ChatResponse("");
         }
 
-          return character.getName() + " heard you say: " + userMessage;
+        CharacterPrompt prompt = new CharacterPrompt(
+                character.getName(),
+                character.getPersonality(),
+                character.getBackground()
+        );
+
+        return responseGenerator.generate(prompt, userMessage);
     }
 }
