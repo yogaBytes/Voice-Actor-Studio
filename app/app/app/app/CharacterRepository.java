@@ -12,10 +12,12 @@ public class CharacterRepository {
     public CharacterRepository(Context context) {
         characterManager = new CharacterManager();
         characterStorage = new CharacterStorage(context);
+        loadCharacters();
     }
 
     public void addCharacter(Character character) {
         characterManager.addCharacter(character);
+        saveCharacters();
     }
 
     public List<Character> getCharacters() {
@@ -28,6 +30,7 @@ public class CharacterRepository {
 
     public void removeCharacter(String name) {
         characterManager.removeCharacter(name);
+        saveCharacters();
     }
 
     public void clearCharacters() {
@@ -36,11 +39,14 @@ public class CharacterRepository {
     }
 
     public void saveCharacters() {
-        characterStorage.saveCharacters(characterManager.getCharacters());
+        characterStorage.saveCharacters(
+                characterManager.getCharacters()
+        );
     }
 
     public void loadCharacters() {
-        List<Character> savedCharacters = characterStorage.loadCharacters();
+        List<Character> savedCharacters =
+                characterStorage.loadCharacters();
 
         characterManager.clearCharacters();
 
