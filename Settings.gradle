@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.nam    e = "VoiceActorStudio"
+rootProject.name = "VoiceActorStudio"
 include(":app")
